@@ -94,5 +94,154 @@ namespace NationalLibrary.Helper
                     }
             };
         }
+
+        public static StoredProcedure ImportDataFromCSV(CSVImportHeader paramInValue)
+        {
+            var paramIn = new List<StoredProcedureParamIn>
+            {
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typeTitle",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.Title
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typeSKU",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.SKU
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typePrice",
+                    ParamType = OracleDbType.Double,
+                    ParamValue = paramInValue.Price
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typePublishDate",
+                    ParamType = OracleDbType.Date,
+                    ParamValue = paramInValue.PublishDate
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typeISBNCode",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.ISBNCode
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typeQuantity",
+                    ParamType = OracleDbType.Int32,
+                    ParamValue = paramInValue.Quantity
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "typeQuantityBroken",
+                    ParamType = OracleDbType.Int32,
+                    ParamValue = paramInValue.QuantityBroken
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "publisherName",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.PublisherName
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "publisherLocation",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.PublisherLocation
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "editionNumber",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.EditionNumber
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "editionDate",
+                    ParamType = OracleDbType.Date,
+                    ParamValue = paramInValue.EditionDate
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "editorName",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.EditorName
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "editorEmail",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.EditorEmail
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "editorLocation",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.EditorLocation
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "formatType",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.Format
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "languageShortCode",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.Language
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "languageLongCode",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.LanguageLongCode
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "categoryName",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.Category
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "copyrightName",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.Copyright
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "authorName",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.AuthorName
+                },
+                new StoredProcedureParamIn
+                {
+                    ParamName = "authorEmail",
+                    ParamType = OracleDbType.NVarchar2,
+                    ParamValue = paramInValue.AuthorEmail
+                }
+            };
+
+            var paramOut = new StoredProcedureParamOut
+            {
+                ParamName = "p_result",
+                ParamType = OracleDbType.NVarchar2
+            };
+
+            return new StoredProcedure
+            {
+                Name = TableConstants.ImportDataFromCSV,
+                ListParamsIn = paramIn,
+                ListParamsOut = new List<StoredProcedureParamOut>
+                    {
+                        paramOut
+                    }
+            };
+        }
     }
 }

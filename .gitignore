@@ -3,3 +3,5 @@
 ################################################################################
 
 /NationalLibrary/.vs/NationalLibrary/v15/Server/sqlite3
+/NationalLibrary/NationalLibrary/bin
+/NationalLibrary/NationalLibrary/obj

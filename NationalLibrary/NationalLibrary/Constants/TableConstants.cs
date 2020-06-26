@@ -68,6 +68,7 @@ namespace NationalLibrary.Constants
         public const string SearchLibraryTypeByTitle = "SearchLibraryTypeByTitle";
         public const string SearchLibraryTypeByKeyword = "SearchLibraryTypeByKeyword";
         public const string GetLibraryTypeByID = "GetLibraryTypeByID";
+        public const string ImportDataFromCSV = "ImportDataFromCSV";
 
         #endregion
 

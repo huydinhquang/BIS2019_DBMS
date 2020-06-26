@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
 
 namespace NationalLibrary
 {
@@ -31,75 +34,36 @@ namespace NationalLibrary
             SearchByTitle();
         }
 
-        private void PrepareData()
-        {
-            listOfTables = new List<TableName>
-            {
-                new TableName {
-                    ComboBox = cbxPublisher,
-                    ComboBoxUpdate = cbxPublisherUpdate,
-                    Name = TableConstants.LibraryTypePublisher,
-                    ValueColStr = TableConstants.LibraryTypePublisherIDStr,
-                    DisplayColStr = TableConstants.LibraryTypePublisherNameStr
-                },
-                new TableName {
-                    ComboBox = cbxEdition,
-                    ComboBoxUpdate = cbxEditionUpdate,
-                    Name = TableConstants.LibraryTypeEdition,
-                    ValueColStr = TableConstants.LibraryTypeEditionIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeEditionNumberStr
-                },
-                new TableName {
-                    ComboBox = cbxEditor,
-                    ComboBoxUpdate = cbxEditorUpdate,
-                    Name = TableConstants.LibraryTypeEditor,
-                    ValueColStr = TableConstants.LibraryTypeEditorIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeEditorNameStr
-                },
-                new TableName {
-                    ComboBox = cbxFormat,
-                    ComboBoxUpdate = cbxFormatUpdate,
-                    Name = TableConstants.LibraryTypeFormat,
-                    ValueColStr = TableConstants.LibraryTypeFormatIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeFormatTypeStr
-                },
-                new TableName {
-                    ComboBox = cbxLanguage,
-                    ComboBoxUpdate = cbxLanguageUpdate,
-                    Name = TableConstants.LibraryTypeLanguage,
-                    ValueColStr = TableConstants.LibraryTypeLanguageIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeLanguageShortCodeStr
-                },
-                new TableName {
-                    ComboBox = cbxCategory,
-                    ComboBoxUpdate = cbxCategoryUpdate,
-                    Name = TableConstants.LibraryTypeCategory,
-                    ValueColStr = TableConstants.LibraryTypeCategoryIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeCategoryNameStr
-                },
-                new TableName {
-                    ComboBox = cbxCopyright,
-                    ComboBoxUpdate = cbxCopyrightUpdate,
-                    Name = TableConstants.LibraryTypeCopyright,
-                    ValueColStr = TableConstants.LibraryTypeCopyrightIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeCopyrightNameStr
-                },
-                new TableName {
-                    ComboBox = cbxAuthor,
-                    ComboBoxUpdate = cbxAuthorUpdate,
-                    Name = TableConstants.LibraryTypeAuthor,
-                    ValueColStr = TableConstants.LibraryTypeAuthorIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeAuthorNameStr
-                },
-                new TableName {
-                    ComboBox = new ComboBox(),
-                    ComboBoxUpdate = cbxStatusUpdate,
-                    Name = TableConstants.LibraryTypeStatus,
-                    ValueColStr = TableConstants.LibraryTypeStatusIDStr,
-                    DisplayColStr = TableConstants.LibraryTypeStatusNameStr
-                }
-            };
+        #region Form Control
 
+        private void lklDragonBall_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("This tool is developed by Dragon Ball Team - VGU - BIS2019.", "Copyright", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void txtSearchByTitle_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearchByTitle.PerformClick();
+            }
+        }
+
+        private void txtSearchByKeyword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnSearchByKeyword.PerformClick();
+            }
+        }
+
+        private void tcSearchBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!firstLoad)
+            {
+                SearchByKeyword();
+                firstLoad = true;
+            }
         }
 
         private void tcNationalLibrary_SelectedIndexChanged(object sender, EventArgs e)
@@ -154,6 +118,8 @@ namespace NationalLibrary
                     break;
             }
         }
+
+        #endregion
 
         #region Book
 
@@ -578,6 +544,77 @@ namespace NationalLibrary
 
         #region Methods
 
+        private void PrepareData()
+        {
+            listOfTables = new List<TableName>
+            {
+                new TableName {
+                    ComboBox = cbxPublisher,
+                    ComboBoxUpdate = cbxPublisherUpdate,
+                    Name = TableConstants.LibraryTypePublisher,
+                    ValueColStr = TableConstants.LibraryTypePublisherIDStr,
+                    DisplayColStr = TableConstants.LibraryTypePublisherNameStr
+                },
+                new TableName {
+                    ComboBox = cbxEdition,
+                    ComboBoxUpdate = cbxEditionUpdate,
+                    Name = TableConstants.LibraryTypeEdition,
+                    ValueColStr = TableConstants.LibraryTypeEditionIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeEditionNumberStr
+                },
+                new TableName {
+                    ComboBox = cbxEditor,
+                    ComboBoxUpdate = cbxEditorUpdate,
+                    Name = TableConstants.LibraryTypeEditor,
+                    ValueColStr = TableConstants.LibraryTypeEditorIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeEditorNameStr
+                },
+                new TableName {
+                    ComboBox = cbxFormat,
+                    ComboBoxUpdate = cbxFormatUpdate,
+                    Name = TableConstants.LibraryTypeFormat,
+                    ValueColStr = TableConstants.LibraryTypeFormatIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeFormatTypeStr
+                },
+                new TableName {
+                    ComboBox = cbxLanguage,
+                    ComboBoxUpdate = cbxLanguageUpdate,
+                    Name = TableConstants.LibraryTypeLanguage,
+                    ValueColStr = TableConstants.LibraryTypeLanguageIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeLanguageShortCodeStr
+                },
+                new TableName {
+                    ComboBox = cbxCategory,
+                    ComboBoxUpdate = cbxCategoryUpdate,
+                    Name = TableConstants.LibraryTypeCategory,
+                    ValueColStr = TableConstants.LibraryTypeCategoryIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeCategoryNameStr
+                },
+                new TableName {
+                    ComboBox = cbxCopyright,
+                    ComboBoxUpdate = cbxCopyrightUpdate,
+                    Name = TableConstants.LibraryTypeCopyright,
+                    ValueColStr = TableConstants.LibraryTypeCopyrightIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeCopyrightNameStr
+                },
+                new TableName {
+                    ComboBox = cbxAuthor,
+                    ComboBoxUpdate = cbxAuthorUpdate,
+                    Name = TableConstants.LibraryTypeAuthor,
+                    ValueColStr = TableConstants.LibraryTypeAuthorIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeAuthorNameStr
+                },
+                new TableName {
+                    ComboBox = new ComboBox(),
+                    ComboBoxUpdate = cbxStatusUpdate,
+                    Name = TableConstants.LibraryTypeStatus,
+                    ValueColStr = TableConstants.LibraryTypeStatusIDStr,
+                    DisplayColStr = TableConstants.LibraryTypeStatusNameStr
+                }
+            };
+
+        }
+
         private void BindDataToForm(DataTable dt)
         {
             if (dt.Rows.Count > 0)
@@ -611,39 +648,12 @@ namespace NationalLibrary
             txtSearchByTitle.Text = title;
             var storedGetLibraryType = BuildingStoredProcHelper.BuildStoredStrSearchByTitle(title);
             HandlingDataHelper.LoadDataToGrid(dgvSearchByTitle, DataGridViewHeader.listOfColumnsType, storedGetLibraryType);
+            lblSearchByTitleCount.Text = $"Total: {dgvSearchByTitle.RowCount} record(s)";
         }
 
         #endregion
 
-        private void lklDragonBall_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            MessageBox.Show("This tool is developed by Dragon Ball Team - VGU - BIS2019.", "Copyright", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void txtSearchByTitle_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnSearchByTitle.PerformClick();
-            }
-        }
-
-        private void txtSearchByKeyword_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnSearchByKeyword.PerformClick();
-            }
-        }
-
-        private void tcSearchBy_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!firstLoad)
-            {
-                SearchByKeyword();
-                firstLoad = true;
-            }
-        }
+        #region Import
 
         private void btnImport_Click(object sender, EventArgs e)
         {
@@ -653,7 +663,35 @@ namespace NationalLibrary
                 return;
             }
 
-
+            try
+            {
+                using (var reader = new StreamReader(txtFile.Text))
+                {
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        var records = csv.GetRecords<CSVImportHeader>();
+                        foreach (var record in records)
+                        {
+                            var recordTemp = record;
+                            var strSeparators = new string[] { "\n" };
+                            var listAuthorNames = record.AuthorName.Split(strSeparators, StringSplitOptions.None);
+                            var listAuthorEmails = record.AuthorEmail.Split(strSeparators, StringSplitOptions.None);
+                            var author = new Dictionary<string, string>();
+                            for (int i = 0; i < listAuthorNames.Length; i++)
+                            {
+                                recordTemp.AuthorName = listAuthorNames[i];
+                                recordTemp.AuthorEmail = listAuthorEmails[i];
+                                var storedImportCSV = BuildingStoredProcHelper.ImportDataFromCSV(recordTemp);
+                                HandlingDataHelper.ImportData(storedImportCSV);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error when importing. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -681,5 +719,7 @@ namespace NationalLibrary
                 txtFile.Enabled = false;
             }
         }
+
+        #endregion
     }
 }

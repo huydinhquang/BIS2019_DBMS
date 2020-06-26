@@ -104,6 +104,12 @@ namespace NationalLibrary.Helper
             }
         }
 
+        public static void ImportData(StoredProcedure storedProcedure)
+        {
+            OracleDataController.ConnectDB(OracleDataController.GetDBConnection());
+            var result = OracleDataController.ExecuteStoreProc(storedProcedure);
+        }
+
         public static DataTable LoadDataToForm(StoredProcedure storedProcedure)
         {
             OracleDataController.ConnectDB(OracleDataController.GetDBConnection());
