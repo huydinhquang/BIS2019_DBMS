@@ -2,6 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/NationalLibrary/.vs/NationalLibrary/v15/Server/sqlite3
+/NationalLibrary/.vs
 /NationalLibrary/NationalLibrary/bin
 /NationalLibrary/NationalLibrary/obj
