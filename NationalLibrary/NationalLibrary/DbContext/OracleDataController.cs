@@ -119,15 +119,67 @@ namespace NationalLibrary.DbContext
             return dt;
         }
 
-        public static DataTable ExecuteStoreProc(StoredProcedure storedProcedure)
+        public static DataTable ExecuteStoredProcForDataTable(StoredProcedure storedProcedure)
         {
             DataTable dt = new DataTable();
 
-            if (string.IsNullOrEmpty(storedProcedure.Name))
+            if (string.IsNullOrEmpty(storedProcedure.Name) || !storedProcedure.ListParamsOut.Any())
             {
                 return dt;
             }
 
+            try
+            {
+                var cmd = ExecuteStoredProc(storedProcedure);
+                if (cmd == null)
+                {
+                    return dt;
+                }
+                var cursorResult = cmd.Parameters[storedProcedure.ListParamsOut[0].ParamName];
+                using (OracleDataReader reader = ((OracleRefCursor)cursorResult.Value).GetDataReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        dt.Load(reader);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Executre store procedure Error: " + ex.Message);
+            }
+
+            return dt;
+        }
+
+        public static string ExecuteStoredProcForResult(StoredProcedure storedProcedure)
+        {
+            var str = string.Empty;
+
+            if (string.IsNullOrEmpty(storedProcedure.Name) || !storedProcedure.ListParamsOut.Any())
+            {
+                return str;
+            }
+
+            try
+            {
+                var cmd = ExecuteStoredProc(storedProcedure);
+                if (cmd == null)
+                {
+                    return str;
+                }
+                return cmd == null ? str : cmd.Parameters[storedProcedure.ListParamsOut[1].ParamName].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Executre store procedure Error: " + ex.Message);
+            }
+
+            return str;
+        }
+
+        public static OracleCommand ExecuteStoredProc(StoredProcedure storedProcedure)
+        {
             try
             {
                 OracleCommand cmd = conn.CreateCommand();
@@ -148,37 +200,31 @@ namespace NationalLibrary.DbContext
                     cmd.Parameters.AddRange(paramIn.ToArray());
                 }
 
-                if (!storedProcedure.ListParamsOut.Any())
+                foreach (var item in storedProcedure.ListParamsOut)
                 {
-                    return dt;
-                }
-
-                OracleParameter cursor = cmd.Parameters.Add(
-                    new OracleParameter
+                    List<OracleParameter> paramOut = new List<OracleParameter>()
                     {
-                        ParameterName = storedProcedure.ListParamsOut[0].ParamName,
-                        Direction = ParameterDirection.Output,
-                        OracleDbType = storedProcedure.ListParamsOut[0].ParamType
-                    }
-                );
+                        new OracleParameter
+                        {
+                            ParameterName = item.ParamName,
+                            Direction = item.ParamDirection,
+                            OracleDbType = item.ParamType,
+                            Size = 32767
+                        }
+                    };
+                    cmd.Parameters.AddRange(paramOut.ToArray());
+                }
 
                 cmd.CommandText = storedProcedure.Name;
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.ExecuteNonQuery();
-                using (OracleDataReader reader = ((OracleRefCursor)cursor.Value).GetDataReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        dt.Load(reader);
-                    }
-                }
+
+                return cmd;
             }
             catch (Exception ex)
             {
                 throw new Exception("Executre store procedure Error: " + ex.Message);
             }
-
-            return dt;
         }
     }
 }

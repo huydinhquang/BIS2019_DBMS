@@ -21,7 +21,7 @@ CREATE TABLE LibraryType
     LibraryTypeTitle NVARCHAR2(100) NOT NULL,
     LibraryTypeSKU NVARCHAR2(20),
     LibraryTypeAuthorID NUMBER(10),
-    LibraryTypePrice FLOAT(53),
+    LibraryTypePrice NUMBER(10, 2),
     LibraryTypePublishDate DATE,
     LibraryTypeISBNCode NVARCHAR2(50),
     LibraryTypePublisherID NUMBER(10),
@@ -133,6 +133,7 @@ CREATE TABLE LibraryTypeStatus
     PRIMARY KEY (LibraryTypeStatusID)
 );
 /
+ALTER TABLE LibraryType ADD CONSTRAINT UQ_LibraryType UNIQUE (LibraryTypeTitle, LibraryTypeISBNCode, LibraryTypePublisherID, LibraryTypeEditionID, LibraryTypeFormatID, LibraryTypeLanguageID, LibraryTypeAuthorID) NOVALIDATE;
 ALTER TABLE LibraryType ADD CONSTRAINT FK_LibraryType_LibraryTypeAuthor FOREIGN KEY (LibraryTypeAuthorID) REFERENCES LibraryTypeAuthor(LibraryTypeAuthorID);
 ALTER TABLE LibraryType ADD CONSTRAINT FK_LibraryType_LibraryTypePublisher FOREIGN KEY (LibraryTypePublisherID) REFERENCES LibraryTypePublisher(LibraryTypePublisherID);
 ALTER TABLE LibraryType ADD CONSTRAINT FK_LibraryType_LibraryTypeEdition FOREIGN KEY (LibraryTypeEditionID) REFERENCES LibraryTypeEdition(LibraryTypeEditionID);
@@ -289,7 +290,7 @@ BEGIN
             type.LibraryTypeTitle,
             type.LibraryTypeSKU,
             author.LibraryTypeAuthorName,
-            type.LibraryTypePrice,
+            trunc( type.LibraryTypePrice,3) LibraryTypePrice,
             type.LibraryTypePublishDate,
             type.LibraryTypeISBNCode,
             publisher.LibraryTypePublisherName,

@@ -97,23 +97,23 @@ namespace NationalLibrary.Helper
         public static void LoadDataToGrid(DataGridView dgv, List<string> listOfColumns, StoredProcedure storedProcedure)
         {
             OracleDataController.ConnectDB(OracleDataController.GetDBConnection());
-            dgv.DataSource = OracleDataController.ExecuteStoreProc(storedProcedure);
+            dgv.DataSource = OracleDataController.ExecuteStoredProcForDataTable(storedProcedure);
             for (int i = 0; i < dgv.Columns.Count; i++)
             {
                 dgv.Columns[i].HeaderText = listOfColumns[i].ToString();
             }
         }
 
-        public static void ImportData(StoredProcedure storedProcedure)
+        public static string ImportData(StoredProcedure storedProcedure)
         {
             OracleDataController.ConnectDB(OracleDataController.GetDBConnection());
-            var result = OracleDataController.ExecuteStoreProc(storedProcedure);
+            return OracleDataController.ExecuteStoredProcForResult(storedProcedure);
         }
 
         public static DataTable LoadDataToForm(StoredProcedure storedProcedure)
         {
             OracleDataController.ConnectDB(OracleDataController.GetDBConnection());
-            return OracleDataController.ExecuteStoreProc(storedProcedure);
+            return OracleDataController.ExecuteStoredProcForDataTable(storedProcedure);
         }
 
         public static void LoadDataForNewType(List<TableName> listOfTables)

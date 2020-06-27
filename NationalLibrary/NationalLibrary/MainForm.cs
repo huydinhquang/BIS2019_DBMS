@@ -665,6 +665,7 @@ namespace NationalLibrary
 
             try
             {
+                rtbImportData.Text = $"Starting...{Environment.NewLine}{Environment.NewLine}";
                 using (var reader = new StreamReader(txtFile.Text))
                 {
                     using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -679,14 +680,22 @@ namespace NationalLibrary
                             var author = new Dictionary<string, string>();
                             for (int i = 0; i < listAuthorNames.Length; i++)
                             {
+                                // Write process
+                                rtbImportData.Text += $"Processing... ID: {recordTemp.ID} | Title: {recordTemp.Title} | Publisher: {recordTemp.PublisherName} | ISBN: {recordTemp.ISBNCode}{Environment.NewLine}";
+
                                 recordTemp.AuthorName = listAuthorNames[i];
                                 recordTemp.AuthorEmail = listAuthorEmails[i];
                                 var storedImportCSV = BuildingStoredProcHelper.ImportDataFromCSV(recordTemp);
-                                HandlingDataHelper.ImportData(storedImportCSV);
+                                var result = HandlingDataHelper.ImportData(storedImportCSV);
+
+                                // Write result
+                                rtbImportData.Text += $"{result}{Environment.NewLine}{Environment.NewLine}";
+                                rtbImportData.Text += $"=================================================={Environment.NewLine}{Environment.NewLine}";
                             }
                         }
                     }
                 }
+                rtbImportData.Text += $"Finished!";
             }
             catch (Exception ex)
             {

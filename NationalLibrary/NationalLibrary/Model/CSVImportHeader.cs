@@ -9,7 +9,7 @@ namespace NationalLibrary.Model
         public string SKU { get; set; }
         public string AuthorName { get; set; }
         public string AuthorEmail { get; set; }
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         public DateTime PublishDate { get; set; }
         public string ISBNCode { get; set; }
         public int Quantity { get; set; }

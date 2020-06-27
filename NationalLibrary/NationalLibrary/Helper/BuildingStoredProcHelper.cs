@@ -1,11 +1,8 @@
 ﻿using NationalLibrary.Constants;
 using NationalLibrary.Model;
 using Oracle.ManagedDataAccess.Client;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace NationalLibrary.Helper
 {
@@ -22,6 +19,7 @@ namespace NationalLibrary.Helper
             var paramOut = new StoredProcedureParamOut
             {
                 ParamName = "p_result",
+                ParamDirection = ParameterDirection.Output,
                 ParamType = OracleDbType.RefCursor
             };
 
@@ -50,6 +48,7 @@ namespace NationalLibrary.Helper
             var paramOut = new StoredProcedureParamOut
             {
                 ParamName = "p_result",
+                ParamDirection = ParameterDirection.Output,
                 ParamType = OracleDbType.RefCursor
             };
 
@@ -78,6 +77,7 @@ namespace NationalLibrary.Helper
             var paramOut = new StoredProcedureParamOut
             {
                 ParamName = "p_result",
+                ParamDirection = ParameterDirection.Output,
                 ParamType = OracleDbType.RefCursor
             };
 
@@ -227,20 +227,27 @@ namespace NationalLibrary.Helper
                 }
             };
 
-            var paramOut = new StoredProcedureParamOut
+            var paramOut = new List<StoredProcedureParamOut>
             {
-                ParamName = "p_result",
-                ParamType = OracleDbType.NVarchar2
+                new StoredProcedureParamOut
+                {
+                    ParamName = "p_resultNumber",
+                    ParamDirection = ParameterDirection.Output,
+                    ParamType = OracleDbType.Int32
+                },
+                new StoredProcedureParamOut
+                {
+                    ParamName = "p_result",
+                    ParamDirection = ParameterDirection.Output,
+                    ParamType = OracleDbType.NVarchar2
+                }
             };
 
             return new StoredProcedure
             {
                 Name = TableConstants.ImportDataFromCSV,
                 ListParamsIn = paramIn,
-                ListParamsOut = new List<StoredProcedureParamOut>
-                    {
-                        paramOut
-                    }
+                ListParamsOut = paramOut
             };
         }
     }
