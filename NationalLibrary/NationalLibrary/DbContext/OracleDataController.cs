@@ -174,8 +174,6 @@ namespace NationalLibrary.DbContext
             {
                 throw new Exception("Executre store procedure Error: " + ex.Message);
             }
-
-            return str;
         }
 
         public static OracleCommand ExecuteStoredProc(StoredProcedure storedProcedure)

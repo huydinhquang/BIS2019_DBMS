@@ -633,6 +633,6 @@ BEGIN
     EXCEPTION
         WHEN OTHERS THEN
         p_resultNumber := 0;
-        DBMS_OUTPUT.PUT_LINE(p_result);
+        p_result := 'Error: Code: ' || SQLCODE || ' | Message: ' || SQLERRM;
     END;
 END;

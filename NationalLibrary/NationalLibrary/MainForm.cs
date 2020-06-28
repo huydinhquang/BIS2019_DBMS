@@ -681,7 +681,7 @@ namespace NationalLibrary
                             for (int i = 0; i < listAuthorNames.Length; i++)
                             {
                                 // Write process
-                                rtbImportData.Text += $"Processing... ID: {recordTemp.ID} | Title: {recordTemp.Title} | Publisher: {recordTemp.PublisherName} | ISBN: {recordTemp.ISBNCode}{Environment.NewLine}";
+                                rtbImportData.Text += $"Processing... ID: {recordTemp.ID} | Title: {recordTemp.Title}{Environment.NewLine}";
 
                                 recordTemp.AuthorName = listAuthorNames[i];
                                 recordTemp.AuthorEmail = listAuthorEmails[i];
